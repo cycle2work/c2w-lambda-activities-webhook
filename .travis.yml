@@ -11,7 +11,7 @@ env:
 
 deploy:
   provider: lambda
-  function_name: "cycle2work-activities"
+  function_name: "cycle2work-activities-$TRAVIS_BRANCH"
   region: "eu-west-1"
   role: "arn:aws:iam::881121095103:role/travis"
   runtime: "nodejs6.10"
