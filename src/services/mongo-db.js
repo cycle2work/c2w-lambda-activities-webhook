@@ -4,7 +4,8 @@ import {
     MONGODB_URL,
     USERS_COLLECTION,
     ACTIVITIES_COLLECTION,
-    PROCESSED_ACTIVITIES_COLLECTION
+    PROCESSED_ACTIVITIES_COLLECTION,
+    CLUBS_COLLECTION
 } from "../config";
 
 let dbInstance;
@@ -19,6 +20,11 @@ export async function getMongoClient() {
 export async function retrieveUsers(query = {}) {
     const db = await getMongoClient();
     return await db.collection(USERS_COLLECTION).find(query).toArray();
+}
+
+export async function retrieveClubs(query = {}) {
+    const db = await getMongoClient();
+    return await db.collection(CLUBS_COLLECTION).find(query).toArray();
 }
 
 export async function retrieveActivities(query = {}) {

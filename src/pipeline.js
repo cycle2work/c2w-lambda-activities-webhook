@@ -2,25 +2,14 @@ import includes from "lodash.includes";
 import uniq from "lodash.uniq";
 
 import { log } from "./services/logger";
-import { retrieveUsers, insertActivities, retrieveActivities, retrieveProcessedActivities } from "./services/mongo-db";
-import { listAthleteClubs, listClubActivities } from "./services/strava";
+import { retrieveClubs, insertActivities, retrieveActivities, retrieveProcessedActivities } from "./services/mongo-db";
+import { listClubActivities } from "./services/strava";
 
 export default async function pipeline(event, context) {
 
     try {
 
-        const users = await retrieveUsers();
-
-        log.debug({ users });
-
-        const clubs = uniq(await users.reduce(async (state, user) => {
-            const userClubs = await listAthleteClubs({ access_token: user.access_token }).map(club => {
-                return { ...club, access_token: user.access_token };
-            });
-            return [...state, ...userClubs];
-        }, []));
-
-        log.debug({ clubs });
+        const clubs = await retrieveClubs();
 
         const savedActivities = await retrieveActivities();
         log.debug({ savedActivities });

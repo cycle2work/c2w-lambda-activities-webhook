@@ -7,24 +7,20 @@ chai.use(sinonChai);
 
 import { handler } from "index";
 import {
-    USERS_COLLECTION,
+    CLUBS_COLLECTION,
     ACTIVITIES_COLLECTION
 } from "config";
 
 import {
-    athlete,
-    clubId,
-    listAthleteClubs,
+    mockedClub,
+    mockedClubId,
     listClubActivities,
 } from "./mocks/strava";
 
 import { getMongoClient } from "services/mongo-db";
 
 nock("https://www.strava.com", { "encodedQueryParams": true })
-    .get("/api/v3/athlete/clubs?")
-    .times(3)
-    .reply(200, listAthleteClubs())
-    .get(`/api/v3/clubs/${clubId}/activities?per_page=200`)
+    .get(`/api/v3/clubs/${mockedClubId}/activities?per_page=200`)
     .times(3)
     .reply(200, listClubActivities());
 
@@ -36,13 +32,13 @@ describe("`Cycle2work activities function`", () => {
 
     before(async () => {
         db = await getMongoClient();
-        await db.createCollection(USERS_COLLECTION);
+        await db.createCollection(CLUBS_COLLECTION);
         await db.createCollection(ACTIVITIES_COLLECTION);
-        await db.collection(USERS_COLLECTION).insert(athlete);
+        await db.collection(CLUBS_COLLECTION).insert(mockedClub);
     });
 
     after(async () => {
-        await db.dropCollection(USERS_COLLECTION);
+        await db.dropCollection(CLUBS_COLLECTION);
         await db.dropCollection(ACTIVITIES_COLLECTION);
         await db.close();
     });
