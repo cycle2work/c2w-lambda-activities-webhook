@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/mondora/cycle2work-activities.svg?branch=master)](https://travis-ci.org/mondora/cycle2work-activities)
-[![Dependency Status](https://david-dm.org/mondora/cycle2work-activities.svg)](https://david-dm.org/mondora/cycle2work-activities)
-[![devDependency Status](https://david-dm.org/mondora/cycle2work-activities/dev-status.svg)](https://david-dm.org/mondora/cycle2work-activities#info=devDependencies)
+[![Build Status](https://travis-ci.org/cycle2work/c2w-lambda-activities.svg?branch=master)](https://travis-ci.org/cycle2work/c2w-lambda-activities)
+[![Dependency Status](https://david-dm.org/cycle2work/c2w-lambda-activities.svg)](https://david-dm.org/cycle2work/c2w-lambda-activities)
+[![devDependency Status](https://david-dm.org/cycle2work/c2w-lambda-activities/dev-status.svg)](https://david-dm.org/cycle2work/c2w-lambda-activities#info=devDependencies)
 
-# cycle2work-activities
+# c2w-lambda-activities
 
 AWS Lambda function to persist user activities data and enjoy [`Cycle2work`](https://cycle2work.io).
 
