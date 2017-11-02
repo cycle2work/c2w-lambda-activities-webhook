@@ -24,6 +24,11 @@ export default async function pipeline(event, context) {
                 access_token: club.access_token,
                 id: club.id,
                 per_page: 200
+            }).map(activity => {
+                return {
+                    ...activity,
+                    club: club
+                };
             });
             return [...state, ...clubActivies.filter(x => x.commute && !includes(totalActivities.map(x => x.id), x.id))];
         }, []));

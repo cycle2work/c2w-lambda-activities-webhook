@@ -1,6 +1,7 @@
 export const mockedClubId = 80327326;
 
 export const mockedClub = {
+    "_id": mockedClubId,
     "id": mockedClubId,
     "resource_state": 2,
     "name": "Team Strava Cycling",
