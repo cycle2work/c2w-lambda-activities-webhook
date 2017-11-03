@@ -2,7 +2,6 @@ import { MongoClient } from "mongodb";
 
 import {
     MONGODB_URL,
-    USERS_COLLECTION,
     ACTIVITIES_COLLECTION,
     PROCESSED_ACTIVITIES_COLLECTION,
     CLUBS_COLLECTION
@@ -15,11 +14,6 @@ export async function getMongoClient() {
         dbInstance = await MongoClient.connect(MONGODB_URL);
     }
     return dbInstance;
-}
-
-export async function retrieveUsers(query = {}) {
-    const db = await getMongoClient();
-    return await db.collection(USERS_COLLECTION).find(query).toArray();
 }
 
 export async function retrieveClubs(query = {}) {

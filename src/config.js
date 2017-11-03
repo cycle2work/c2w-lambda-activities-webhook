@@ -8,7 +8,6 @@ export const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID;
 export const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
 export const STRAVA_REDIRECT_URI = process.env.STRAVA_REDIRECT_URI;
 export const STRAVA_CODE_TEST = process.env.STRAVA_CODE_TEST;
-export const USERS_COLLECTION = process.env.USERS_COLLECTION || "users";
 export const ACTIVITIES_COLLECTION = process.env.ACTIVITIES_COLLECTION || "activities";
 export const CLUBS_COLLECTION = process.env.CLUBS_COLLECTION || "clubs";
 export const PROCESSED_ACTIVITIES_COLLECTION = process.env.PROCESSED_ACTIVITIES_COLLECTION || "processed-activities";
