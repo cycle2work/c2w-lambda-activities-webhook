@@ -28,7 +28,6 @@ describe("`Cycle2work activities function`", () => {
 
     let db;
     let context;
-    let callback;
 
     before(async () => {
         db = await getMongoClient();
@@ -47,12 +46,11 @@ describe("`Cycle2work activities function`", () => {
         context = {
             succeed: spy()
         };
-        callback = spy();
     });
 
 
     it("scrape and save for new clubs activities", async () => {
-        await handler(null, context, callback);
+        await handler(null, context);
 
         expect(context.succeed).to.have.been.calledOnce;
 
@@ -61,7 +59,7 @@ describe("`Cycle2work activities function`", () => {
     });
 
     it("scrape and ignore for already saved clubs activities", async () => {
-        await handler(null, context, callback);
+        await handler(null, context);
 
         expect(context.succeed).to.have.been.calledOnce;
 

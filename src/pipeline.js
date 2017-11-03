@@ -37,10 +37,10 @@ export default async function pipeline(event, context) {
 
         await insertActivities(activies);
 
+        context.succeed();
+
     } catch (error) {
         log.debug({ error });
+        context.fail();
     }
-
-    context.succeed();
-
 }
