@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/cycle2work/c2w-lambda-activities.svg?branch=master)](https://travis-ci.org/cycle2work/c2w-lambda-activities)
+[![codecov](https://codecov.io/gh/cycle2work/c2w-lambda-activities/branch/master/graph/badge.svg)](https://codecov.io/gh/cycle2work/c2w-lambda-activities)
 [![Dependency Status](https://david-dm.org/cycle2work/c2w-lambda-activities.svg)](https://david-dm.org/cycle2work/c2w-lambda-activities)
 [![devDependency Status](https://david-dm.org/cycle2work/c2w-lambda-activities/dev-status.svg)](https://david-dm.org/cycle2work/c2w-lambda-activities#info=devDependencies)
 
