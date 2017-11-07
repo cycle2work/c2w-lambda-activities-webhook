@@ -10,6 +10,7 @@ export default async function pipeline(event, context) {
     try {
 
         const clubs = await retrieveClubs();
+        log.debug({ clubs });
 
         const savedActivities = await retrieveActivities();
         log.debug({ savedActivities });
