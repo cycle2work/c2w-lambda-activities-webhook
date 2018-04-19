@@ -23,30 +23,35 @@ export default async function pipeline(event, context) {
 
         const totalActivities = [...processedActivities, ...savedActivities];
 
+        const activitiesIds = totalActivities.map(x => x.id).filter(x => x);
+        log.debug({ activitiesIds });
+
         const activies = uniq(
             await clubs.reduce(async (state, club) => {
                 const clubActivies = await listClubActivities({
                     access_token: club.access_token,
                     id: club.id,
-                    per_page: 200
+                    per_page: 50
                 }).map(activity => {
                     return {
                         ...activity,
                         club: club
                     };
                 });
+
+                log.debug({ clubActivies });
                 return [
                     ...state,
                     ...clubActivies.filter(
                         x =>
                             (x.commute || /#cycle2work/.test(x.name)) &&
-                            !includes(totalActivities.map(x => x.id), x.id)
+                            !includes(activitiesIds, x.id)
                     )
                 ];
             }, [])
         );
 
-        log.debug({ activies });
+        log.info({ activies });
 
         await insertActivities(activies);
 

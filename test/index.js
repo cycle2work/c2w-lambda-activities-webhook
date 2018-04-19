@@ -13,7 +13,7 @@ import { mockedClub, mockedClubId, listClubActivities } from "./mocks/strava";
 import { getMongoClient } from "services/mongo-db";
 
 nock("https://www.strava.com", { encodedQueryParams: true })
-    .get(`/api/v3/clubs/${mockedClubId}/activities?per_page=200`)
+    .get(`/api/v3/clubs/${mockedClubId}/activities?per_page=50`)
     .times(3)
     .reply(200, listClubActivities());
 
