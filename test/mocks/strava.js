@@ -1,23 +1,11 @@
-export const mockedClubId = 80327326;
+export const mockedClub1 = {
+    _id: 1,
+    id: 1
+};
 
-export const mockedClub = {
-    _id: mockedClubId,
-    id: mockedClubId,
-    resource_state: 2,
-    name: "Team Strava Cycling",
-    profile_medium: "http://pics.com/clubs/1/medium.jpg",
-    profile: "http://pics.com/clubs/1/large.jpg",
-    cover_photo: "http://pics.com/clubs/1/cover/large.jpg",
-    cover_photo_small: "http://pics.com/clubs/1/cover/small.jpg",
-    sport_type: "cycling",
-    city: "San Francisco",
-    state: "California",
-    country: "United States",
-    private: true,
-    member_count: 23,
-    featured: false,
-    verified: false,
-    url: "strava-cycling"
+export const mockedClub2 = {
+    _id: 2,
+    id: 2
 };
 
 export function listClubActivities() {

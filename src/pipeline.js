@@ -1,3 +1,5 @@
+import { reduce } from "bluebird";
+
 import includes from "lodash.includes";
 import uniq from "lodash.uniq";
 
@@ -27,8 +29,9 @@ export default async function pipeline(event, context) {
         const activitiesIds = totalActivities.map(x => x._id).filter(x => x);
         log.debug({ activitiesIds });
 
-        const activies = uniq(
-            await clubs.reduce(async (state, club) => {
+        const activies = await reduce(
+            clubs,
+            async (state, club) => {
                 const clubActivies = await listClubActivities({
                     access_token: club.access_token,
                     id: club.id,
@@ -49,12 +52,13 @@ export default async function pipeline(event, context) {
                             !includes(activitiesIds, getActivityId(x))
                     )
                 ];
-            }, [])
+            },
+            []
         );
 
         log.info({ activies });
 
-        await insertActivities(activies);
+        await insertActivities(uniq(activies));
 
         context.succeed();
     } catch (error) {

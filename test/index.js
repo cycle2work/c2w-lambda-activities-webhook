@@ -8,14 +8,19 @@ chai.use(sinonChai);
 import { handler } from "index";
 import { CLUBS_COLLECTION, ACTIVITIES_COLLECTION } from "config";
 
-import { mockedClub, mockedClubId, listClubActivities } from "./mocks/strava";
+import { mockedClub1, mockedClub2, listClubActivities } from "./mocks/strava";
 
 import { getMongoClient } from "services/mongo-db";
 
 nock("https://www.strava.com", { encodedQueryParams: true })
-    .get(`/api/v3/clubs/${mockedClubId}/activities?per_page=50`)
+    .get(`/api/v3/clubs/${mockedClub1.id}/activities?per_page=50`)
     .times(3)
     .reply(200, listClubActivities());
+
+nock("https://www.strava.com", { encodedQueryParams: true })
+    .get(`/api/v3/clubs/${mockedClub2.id}/activities?per_page=50`)
+    .times(3)
+    .reply(200, () => []);
 
 describe("`Cycle2work activities function`", () => {
     let db;
@@ -25,7 +30,8 @@ describe("`Cycle2work activities function`", () => {
         db = await getMongoClient();
         await db.createCollection(CLUBS_COLLECTION);
         await db.createCollection(ACTIVITIES_COLLECTION);
-        await db.collection(CLUBS_COLLECTION).insert(mockedClub);
+        await db.collection(CLUBS_COLLECTION).insert(mockedClub1);
+        await db.collection(CLUBS_COLLECTION).insert(mockedClub2);
     });
 
     after(async () => {
