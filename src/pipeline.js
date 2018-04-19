@@ -3,9 +3,10 @@ import uniq from "lodash.uniq";
 
 import { log } from "./services/logger";
 import {
-    retrieveClubs,
+    getActivityId,
     insertActivities,
     retrieveActivities,
+    retrieveClubs,
     retrieveProcessedActivities
 } from "./services/mongo-db";
 import { listClubActivities } from "./services/strava";
@@ -23,7 +24,7 @@ export default async function pipeline(event, context) {
 
         const totalActivities = [...processedActivities, ...savedActivities];
 
-        const activitiesIds = totalActivities.map(x => x.id).filter(x => x);
+        const activitiesIds = totalActivities.map(x => x._id).filter(x => x);
         log.debug({ activitiesIds });
 
         const activies = uniq(
@@ -45,7 +46,7 @@ export default async function pipeline(event, context) {
                     ...clubActivies.filter(
                         x =>
                             (x.commute || /#cycle2work/.test(x.name)) &&
-                            !includes(activitiesIds, x.id)
+                            !includes(activitiesIds, getActivityId(x))
                     )
                 ];
             }, [])
