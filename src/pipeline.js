@@ -31,7 +31,7 @@ export default async function pipeline(event, context) {
                     club: club
                 };
             });
-            return [...state, ...clubActivies.filter(x => x.commute && !includes(totalActivities.map(x => x.id), x.id))];
+            return [...state, ...clubActivies.filter(x => (x.commute || /#cycle2work/.test(x.name)) && !includes(totalActivities.map(x => x.id), x.id))];
         }, []));
 
         log.debug({ activies });
