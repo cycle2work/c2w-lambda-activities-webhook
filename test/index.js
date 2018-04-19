@@ -6,26 +6,18 @@ import sinonChai from "sinon-chai";
 chai.use(sinonChai);
 
 import { handler } from "index";
-import {
-    CLUBS_COLLECTION,
-    ACTIVITIES_COLLECTION
-} from "config";
+import { CLUBS_COLLECTION, ACTIVITIES_COLLECTION } from "config";
 
-import {
-    mockedClub,
-    mockedClubId,
-    listClubActivities,
-} from "./mocks/strava";
+import { mockedClub, mockedClubId, listClubActivities } from "./mocks/strava";
 
 import { getMongoClient } from "services/mongo-db";
 
-nock("https://www.strava.com", { "encodedQueryParams": true })
+nock("https://www.strava.com", { encodedQueryParams: true })
     .get(`/api/v3/clubs/${mockedClubId}/activities?per_page=200`)
     .times(3)
     .reply(200, listClubActivities());
 
 describe("`Cycle2work activities function`", () => {
-
     let db;
     let context;
 
@@ -48,14 +40,16 @@ describe("`Cycle2work activities function`", () => {
         };
     });
 
-
     it("scrape and save for new clubs activities", async () => {
         await handler(null, context);
 
         expect(context.succeed).to.have.been.calledOnce;
 
-        const activities = await db.collection(ACTIVITIES_COLLECTION).find({}).toArray();
-        expect(activities.length).to.be.equal(1);
+        const activities = await db
+            .collection(ACTIVITIES_COLLECTION)
+            .find({})
+            .toArray();
+        expect(activities.length).to.be.equal(3);
     });
 
     it("scrape and ignore for already saved clubs activities", async () => {
@@ -63,8 +57,10 @@ describe("`Cycle2work activities function`", () => {
 
         expect(context.succeed).to.have.been.calledOnce;
 
-        const activities = await db.collection(ACTIVITIES_COLLECTION).find({}).toArray();
-        expect(activities.length).to.be.equal(1);
+        const activities = await db
+            .collection(ACTIVITIES_COLLECTION)
+            .find({})
+            .toArray();
+        expect(activities.length).to.be.equal(3);
     });
-
 });

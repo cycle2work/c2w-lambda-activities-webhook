@@ -2,13 +2,16 @@ import includes from "lodash.includes";
 import uniq from "lodash.uniq";
 
 import { log } from "./services/logger";
-import { retrieveClubs, insertActivities, retrieveActivities, retrieveProcessedActivities } from "./services/mongo-db";
+import {
+    retrieveClubs,
+    insertActivities,
+    retrieveActivities,
+    retrieveProcessedActivities
+} from "./services/mongo-db";
 import { listClubActivities } from "./services/strava";
 
 export default async function pipeline(event, context) {
-
     try {
-
         const clubs = await retrieveClubs();
         log.debug({ clubs });
 
@@ -20,26 +23,34 @@ export default async function pipeline(event, context) {
 
         const totalActivities = [...processedActivities, ...savedActivities];
 
-        const activies = uniq(await clubs.reduce(async (state, club) => {
-            const clubActivies = await listClubActivities({
-                access_token: club.access_token,
-                id: club.id,
-                per_page: 200
-            }).map(activity => {
-                return {
-                    ...activity,
-                    club: club
-                };
-            });
-            return [...state, ...clubActivies.filter(x => (x.commute || /#cycle2work/.test(x.name)) && !includes(totalActivities.map(x => x.id), x.id))];
-        }, []));
+        const activies = uniq(
+            await clubs.reduce(async (state, club) => {
+                const clubActivies = await listClubActivities({
+                    access_token: club.access_token,
+                    id: club.id,
+                    per_page: 200
+                }).map(activity => {
+                    return {
+                        ...activity,
+                        club: club
+                    };
+                });
+                return [
+                    ...state,
+                    ...clubActivies.filter(
+                        x =>
+                            (x.commute || /#cycle2work/.test(x.name)) &&
+                            !includes(totalActivities.map(x => x.id), x.id)
+                    )
+                ];
+            }, [])
+        );
 
         log.debug({ activies });
 
         await insertActivities(activies);
 
         context.succeed();
-
     } catch (error) {
         log.debug({ error });
         context.fail();
