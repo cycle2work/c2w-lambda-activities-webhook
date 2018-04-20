@@ -3,7 +3,6 @@ import dotenv from "dotenv";
 dotenv.load();
 
 export const LOG_LEVEL = process.env.LOG_LEVEL || "debug";
-export const STRAVA_WEBHOOKS_URL = process.env.STRAVA_WEBHOOKS_URL || "https://api.strava.com/api/v3/push_subscriptions";
 export const STRAVA_ACCESS_TOKEN = process.env.STRAVA_ACCESS_TOKEN;
 export const STRAVA_CLIENT_ID = process.env.STRAVA_CLIENT_ID;
 export const STRAVA_CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;

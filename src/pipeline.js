@@ -1,13 +1,10 @@
 import { map } from "bluebird";
-import axios from "axios";
 
 import { log } from "./services/logger";
 import { upsertActivity, retrieveAthlete } from "./services/mongo-db";
 import { getActivity } from "./services/strava";
 
-import { STRAVA_WEBHOOKS_URL } from "./config";
-
-export default async function pipeline(event, context) {
+export default async function pipeline(event, context, callback) {
     try {
         log.debug({ event });
 
@@ -15,14 +12,12 @@ export default async function pipeline(event, context) {
         log.debug({ body, httpMethod, queryStringParameters });
 
         if (httpMethod === "GET") {
-            const { response } = await axios({
-                method: "get",
-                url: STRAVA_WEBHOOKS_URL,
-                data: JSON.stringify({
+            callback(null, {
+                statusCode: 200,
+                body: JSON.stringify({
                     "hub.challenge": queryStringParameters["hub.challenge"]
                 })
             });
-            log.debug({ response });
         }
 
         const parsed = JSON.parse(body);
