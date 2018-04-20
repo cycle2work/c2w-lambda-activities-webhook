@@ -15,7 +15,13 @@ export default async function pipeline(event, context) {
         log.debug({ body, httpMethod, queryStringParameters });
 
         if (httpMethod === "GET") {
-            const response = await axios.get(`${STRAVA_WEBHOOKS_URL}?hub.challenge=${queryStringParameters["hub.challenge"]}`);
+            const { response } = await axios({
+                method: "get",
+                url: STRAVA_WEBHOOKS_URL,
+                data: JSON.stringify({
+                    "hub.challenge": queryStringParameters["hub.challenge"]
+                })
+            });
             log.debug({ response });
         }
 
