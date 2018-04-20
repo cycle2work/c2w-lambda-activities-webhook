@@ -6,37 +6,41 @@ import sinonChai from "sinon-chai";
 chai.use(sinonChai);
 
 import { handler } from "index";
-import { CLUBS_COLLECTION, ACTIVITIES_COLLECTION } from "config";
+import { ACTIVITIES_COLLECTION } from "config";
 
-import { mockedClub1, mockedClub2, listClubActivities } from "./mocks/strava";
+import { mockedActivity } from "./mocks/strava";
 
 import { getMongoClient } from "services/mongo-db";
+import { ATHLETES_COLLECTION } from "../src/config";
 
 nock("https://www.strava.com", { encodedQueryParams: true })
-    .get(`/api/v3/clubs/${mockedClub1.id}/activities?per_page=50`)
+    .get(`/api/v3/activities/${mockedActivity.id}?`)
     .times(3)
-    .reply(200, listClubActivities());
+    .reply(200, () => mockedActivity);
 
-nock("https://www.strava.com", { encodedQueryParams: true })
-    .get(`/api/v3/clubs/${mockedClub2.id}/activities?per_page=50`)
-    .times(3)
-    .reply(200, () => []);
-
-describe("`Cycle2work activities function`", () => {
+describe("Cycle2work activities function", () => {
     let db;
     let context;
+    let callback = spy();
 
     before(async () => {
         db = await getMongoClient();
-        await db.createCollection(CLUBS_COLLECTION);
         await db.createCollection(ACTIVITIES_COLLECTION);
-        await db.collection(CLUBS_COLLECTION).insert(mockedClub1);
-        await db.collection(CLUBS_COLLECTION).insert(mockedClub2);
+        await db.createCollection(ATHLETES_COLLECTION);
+        await db.collection(ATHLETES_COLLECTION).insert({
+            id: 134815,
+            clubs: [
+                {
+                    id: 1,
+                    name: "clubaname"
+                }
+            ]
+        });
     });
 
     after(async () => {
-        await db.dropCollection(CLUBS_COLLECTION);
         await db.dropCollection(ACTIVITIES_COLLECTION);
+        await db.dropCollection(ATHLETES_COLLECTION);
         await db.close();
     });
 
@@ -44,29 +48,38 @@ describe("`Cycle2work activities function`", () => {
         context = {
             succeed: spy()
         };
+        callback.reset();
     });
 
-    it("scrape and save for new clubs activities", async () => {
-        await handler(null, context);
+    it("receive and upsert activity", async () => {
+        await handler(
+            {
+                body: `{"object_id": ${mockedActivity.id}}`
+            },
+            context,
+            callback
+        );
 
-        expect(context.succeed).to.have.been.calledOnce;
+        await handler(
+            {
+                body: `{"object_id": ${mockedActivity.id}}`
+            },
+            context,
+            callback
+        );
+
+        expect(context.succeed).to.have.been.calledTwice;
 
         const activities = await db
             .collection(ACTIVITIES_COLLECTION)
             .find({})
             .toArray();
-        expect(activities.length).to.be.equal(3);
-    });
 
-    it("scrape and ignore for already saved clubs activities", async () => {
-        await handler(null, context);
+        expect(activities.length).to.be.equal(1);
 
-        expect(context.succeed).to.have.been.calledOnce;
-
-        const activities = await db
-            .collection(ACTIVITIES_COLLECTION)
-            .find({})
-            .toArray();
-        expect(activities.length).to.be.equal(3);
+        activities.forEach(x => {
+            expect(x.name).to.equal("Happy Friday");
+            expect(x.athlete.id).to.equal(134815);
+        });
     });
 });
