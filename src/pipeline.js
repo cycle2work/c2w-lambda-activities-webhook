@@ -24,11 +24,14 @@ export default async function pipeline(event, context, callback) {
         const parsed = JSON.parse(body);
         log.debug({ parsed });
 
-        const activity = await getActivity({ id: parsed.object_id });
-        log.debug({ activity });
-
-        const athlete = await retrieveAthlete(activity.athlete.id);
+        const athlete = await retrieveAthlete(parsed.owner_id);
         log.debug({ athlete });
+
+        const activity = await getActivity({
+            access_token: athlete.access_token,
+            id: parsed.object_id
+        });
+        log.debug({ activity });
 
         await map(athlete.clubs || [], async club => {
             await upsertActivity({
@@ -38,9 +41,13 @@ export default async function pipeline(event, context, callback) {
             });
         });
 
+        callback(null, {
+            statusCode: 200
+        });
+
         context.succeed();
     } catch (error) {
-        log.debug({ error });
+        log.fatal({ error });
         context.fail();
     }
 }

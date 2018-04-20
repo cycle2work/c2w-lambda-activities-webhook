@@ -28,7 +28,7 @@ describe("Cycle2work activities function", () => {
         await db.createCollection(ACTIVITIES_COLLECTION);
         await db.createCollection(ATHLETES_COLLECTION);
         await db.collection(ATHLETES_COLLECTION).insert({
-            id: 134815,
+            id: mockedActivity.athlete.id,
             clubs: [
                 {
                     id: 1,
@@ -46,15 +46,39 @@ describe("Cycle2work activities function", () => {
 
     beforeEach(() => {
         context = {
-            succeed: spy()
+            succeed: spy(),
+            fail: spy()
         };
         callback.reset();
+    });
+
+    it("echo for webhook pub/sub", async () => {
+        await handler(
+            {
+                httpMethod: "GET",
+                queryStringParameters: {
+                    "hub.challenge": "hub.challenge"
+                },
+                body: null
+            },
+            context,
+            callback
+        );
+
+        expect(callback).to.have.been.calledOnce;
+        expect(callback).to.have.been.calledWith(null, {
+            statusCode: 200,
+            body: JSON.stringify({
+                "hub.challenge": "hub.challenge"
+            })
+        });
     });
 
     it("receive and upsert activity", async () => {
         await handler(
             {
-                body: `{"object_id": ${mockedActivity.id}}`
+                httpMethod: "POST",
+                body: `{"object_id": ${mockedActivity.id}, "owner_id": ${mockedActivity.athlete.id}}`
             },
             context,
             callback
@@ -62,7 +86,8 @@ describe("Cycle2work activities function", () => {
 
         await handler(
             {
-                body: `{"object_id": ${mockedActivity.id}}`
+                httpMethod: "POST",
+                body: `{"object_id": ${mockedActivity.id}, "owner_id": ${mockedActivity.athlete.id}}`
             },
             context,
             callback
