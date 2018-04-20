@@ -24,13 +24,7 @@ export default async function pipeline(event, context, callback) {
         log.debug({ parsed });
 
         const activity = await getActivity({ id: parsed.object_id });
-        log.debug({
-            activity: {
-                id: activity.id,
-                name: activity.name,
-                athlete: activity.athlete
-            }
-        });
+        log.debug({ activity });
 
         const athlete = await retrieveAthlete(activity.athlete.id);
         log.debug({ athlete });
