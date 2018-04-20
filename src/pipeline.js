@@ -18,6 +18,7 @@ export default async function pipeline(event, context, callback) {
                     "hub.challenge": queryStringParameters["hub.challenge"]
                 })
             });
+            return;
         }
 
         const parsed = JSON.parse(body);
