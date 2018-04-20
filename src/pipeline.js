@@ -5,6 +5,8 @@ import { upsertActivity, retrieveAthlete } from "./services/mongo-db";
 import { getActivity } from "./services/strava";
 
 export default async function pipeline(event, context, callback) {
+    context.callbackWaitsForEmptyEventLoop = false;
+
     try {
         log.debug({ event });
 
@@ -33,16 +35,19 @@ export default async function pipeline(event, context, callback) {
         });
         log.debug({ activity });
 
-        await map(athlete.clubs || [], async club => {
-            await upsertActivity({
-                ...activity,
-                athlete,
-                club
+        if (activity.commute || /#cycle2work/.test(activity.name)) {
+            await map(athlete.clubs || [], async club => {
+                await upsertActivity({
+                    ...activity,
+                    athlete,
+                    club
+                });
             });
-        });
+        }
 
         callback(null, {
-            statusCode: 200
+            statusCode: 200,
+            body: null
         });
 
         context.succeed();

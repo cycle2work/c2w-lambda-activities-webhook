@@ -103,7 +103,7 @@ describe("Cycle2work activities function", () => {
         expect(activities.length).to.be.equal(1);
 
         activities.forEach(x => {
-            expect(x.name).to.equal("Happy Friday");
+            expect(x.name).to.equal("#cycle2work yo!");
             expect(x.athlete.id).to.equal(134815);
         });
     });

@@ -7,7 +7,7 @@ export const mockedActivity = {
         id: 134815,
         resource_state: 1
     },
-    name: "Happy Friday",
+    name: "#cycle2work yo!",
     distance: 28099,
     moving_time: 4207,
     elapsed_time: 4410,
@@ -170,10 +170,8 @@ export const mockedActivity = {
             id: null,
             unique_id: "3FDGKL3-204E-4867-9E8D-89FC79EAAE17",
             urls: {
-                "100":
-                    "https://dgtzuqphqg23d.cloudfront.net/Bv93zv5t_mr57v0wXFbY_JyvtucgmU5Ym6N9z_bKeUI-128x96.jpg",
-                "600":
-                    "https://dgtzuqphqg23d.cloudfront.net/Bv93zv5t_mr57v0wXFbY_JyvtucgmU5Ym6N9z_bKeUI-768x576.jpg"
+                "100": "https://dgtzuqphqg23d.cloudfront.net/Bv93zv5t_mr57v0wXFbY_JyvtucgmU5Ym6N9z_bKeUI-128x96.jpg",
+                "600": "https://dgtzuqphqg23d.cloudfront.net/Bv93zv5t_mr57v0wXFbY_JyvtucgmU5Ym6N9z_bKeUI-768x576.jpg"
             },
             source: 1
         },
@@ -184,8 +182,7 @@ export const mockedActivity = {
         {
             destination_url: "strava://athletes/12345678987654321",
             display_name: "Marianne V.",
-            avatar_url:
-                "https://dgalywyr863hv.cloudfront.net/pictures/athletes/12345678987654321/12345678987654321/3/medium.jpg",
+            avatar_url: "https://dgalywyr863hv.cloudfront.net/pictures/athletes/12345678987654321/12345678987654321/3/medium.jpg",
             show_name: true
         }
     ],
