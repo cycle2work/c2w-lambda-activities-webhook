@@ -29,20 +29,22 @@ export default async function pipeline(event, context, callback) {
         const athlete = await retrieveAthlete(parsed.owner_id);
         log.debug({ athlete });
 
-        const activity = await getActivity({
-            access_token: athlete.access_token,
-            id: parsed.object_id
-        });
-        log.debug({ activity });
-
-        if (activity.commute || /#cycle2work/.test(activity.name)) {
-            await map(athlete.clubs || [], async club => {
-                await upsertActivity({
-                    ...activity,
-                    athlete,
-                    club
-                });
+        if (athlete) {
+            const activity = await getActivity({
+                access_token: athlete.access_token,
+                id: parsed.object_id
             });
+            log.debug({ activity });
+
+            if (activity.commute || /#cycle2work/.test(activity.name)) {
+                await map(athlete.clubs || [], async club => {
+                    await upsertActivity({
+                        ...activity,
+                        athlete,
+                        club
+                    });
+                });
+            }
         }
 
         callback(null, {
