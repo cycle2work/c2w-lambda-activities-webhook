@@ -3,6 +3,9 @@
 # dependencies
 node_modules
 
+# errors
+*-error.log
+
 # testing
 coverage
 .nyc_output
