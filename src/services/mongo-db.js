@@ -19,6 +19,6 @@ export async function retrieveAthlete(athleteId) {
 export async function upsertActivity(activity) {
     if (activity) {
         const db = await getMongoClient();
-        await db.collection(ACTIVITIES_COLLECTION).update({ id: activity.id }, activity, { upsert: true });
+        await db.collection(ACTIVITIES_COLLECTION).update({ _id: activity._id }, activity, { upsert: true });
     }
 }

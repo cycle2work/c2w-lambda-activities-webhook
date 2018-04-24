@@ -39,8 +39,8 @@ export default async function pipeline(event, context, callback) {
             if (activity.commute || /#cycle2work/.test(activity.name)) {
                 await map(athlete.clubs || [], async club => {
                     await upsertActivity({
+                        _id: `${activity.id}${club.id}`,
                         ...activity,
-                        id: `${activity.id}${club.id}`,
                         athlete,
                         club
                     });
