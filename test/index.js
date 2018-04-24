@@ -32,7 +32,11 @@ describe("Cycle2work activities function", () => {
             clubs: [
                 {
                     id: 1,
-                    name: "clubaname"
+                    name: "clubaname1"
+                },
+                {
+                    id: 2,
+                    name: "clubaname2"
                 }
             ]
         });
@@ -100,7 +104,11 @@ describe("Cycle2work activities function", () => {
             .find({})
             .toArray();
 
-        expect(activities.length).to.be.equal(1);
+        expect(activities.length).to.be.equal(2);
+
+        expect(activities.find(x => x.club.id === 1)).to.not.be.equal(undefined);
+        expect(activities.find(x => x.club.id === 2)).to.not.be.equal(undefined);
+        expect(activities.find(x => x.club.id === 3)).to.be.equal(undefined);
 
         activities.forEach(x => {
             expect(x.name).to.equal("#cycle2work yo!");

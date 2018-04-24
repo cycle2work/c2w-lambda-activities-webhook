@@ -40,6 +40,7 @@ export default async function pipeline(event, context, callback) {
                 await map(athlete.clubs || [], async club => {
                     await upsertActivity({
                         ...activity,
+                        id: `${activity.id}${club.id}`,
                         athlete,
                         club
                     });
