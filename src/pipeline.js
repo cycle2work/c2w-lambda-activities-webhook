@@ -1,4 +1,5 @@
 import { map } from "bluebird";
+import moment from "moment";
 
 import { log } from "./services/logger";
 import { upsertActivity, retrieveAthlete } from "./services/mongo-db";
@@ -37,12 +38,16 @@ export default async function pipeline(event, context, callback) {
             log.debug({ activity });
 
             if (activity.commute || /#cycle2work/.test(activity.name)) {
+                const date = moment.utc(activity.start_date);
                 await map(athlete.clubs || [], async club => {
                     await upsertActivity({
                         _id: `${activity.id}${club.id}`,
                         ...activity,
                         athlete,
-                        club
+                        club,
+                        year: date.format("YYYY"),
+                        month: date.format("MM"),
+                        day: date.format("DD")
                     });
                 });
             }

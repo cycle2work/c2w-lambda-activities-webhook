@@ -113,6 +113,8 @@ describe("Cycle2work activities function", () => {
         activities.forEach(x => {
             expect(x.name).to.equal("#cycle2work yo!");
             expect(x.athlete.id).to.equal(134815);
+            expect(x.month).to.equal("02");
+            expect(x.year).to.equal("2018");
         });
     });
 });
