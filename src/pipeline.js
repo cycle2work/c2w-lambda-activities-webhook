@@ -46,7 +46,7 @@ export default async function pipeline(event, context, callback) {
                         athlete,
                         club,
                         year: date.format("YYYY"),
-                        month: date.format("MM"),
+                        month: parseInt(date.format("MM")),
                         day: date.format("DD")
                     });
                 });
