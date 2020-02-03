@@ -1,6 +1,4 @@
 import strava from "strava-v3";
 
-import { promisify } from "bluebird";
-
-export const getActivity = promisify(strava.activities.get);
-export const refreshToken = promisify(strava.oauth.refreshToken);
+export const getActivity = (...args) => strava.activities.get(...args);
+export const refreshToken = (...args) => strava.oauth.refreshToken(...args);
