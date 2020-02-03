@@ -2,8 +2,8 @@ import { map } from "bluebird";
 import moment from "moment";
 
 import { log } from "./services/logger";
-import { upsertActivity, retrieveAthlete } from "./services/mongo-db";
-import { getActivity } from "./services/strava";
+import { upsertActivity, retrieveAthlete, updateAthleteToken} from "./services/mongo-db";
+import { getActivity, refreshToken } from "./services/strava";
 
 export default async function pipeline(event, context, callback) {
     context.callbackWaitsForEmptyEventLoop = false;
@@ -31,6 +31,12 @@ export default async function pipeline(event, context, callback) {
         log.debug({ athlete });
 
         if (athlete) {
+            if (athlete.expires_at <= moment.utc().unix()) {
+                log.debug("Refreshing token");
+                const { access_token, refresh_token, expires_at } = await refreshToken(athlete.refresh_token);
+                await updateAthleteToken(parsed.owner_id, access_token, refresh_token, expires_at);
+            }
+
             const activity = await getActivity({
                 access_token: athlete.access_token,
                 id: parsed.object_id

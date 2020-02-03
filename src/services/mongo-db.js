@@ -1,24 +1,27 @@
 import { MongoClient } from "mongodb";
 
-import { MONGODB_URL, ACTIVITIES_COLLECTION, ATHLETES_COLLECTION } from "../config";
+import { MONGODB_URL, ACTIVITIES_COLLECTION, ATHLETES_COLLECTION, DB_NAME } from "../config";
 
-let dbInstance;
+let clientInstance;
 
 export async function getMongoClient() {
-    if (!dbInstance) {
-        dbInstance = await MongoClient.connect(MONGODB_URL);
+    if (!clientInstance) {
+        clientInstance = await MongoClient.connect(MONGODB_URL, { useUnifiedTopology: true });
     }
-    return dbInstance;
+    return clientInstance.db(DB_NAME);
 }
 
 export async function retrieveAthlete(athleteId) {
-    const db = await getMongoClient();
-    return await db.collection(ATHLETES_COLLECTION).findOne({ id: athleteId });
+    const client = await getMongoClient();
+    return await client.collection(ATHLETES_COLLECTION).findOne({ id: athleteId });
+}
+
+export async function updateAthleteToken(athleteId, access_token, refresh_token, expires_at) {
+    const client = await getMongoClient();
+    await client.collection(ATHLETES_COLLECTION).updateOne({ id: athleteId }, { $set: { access_token, refresh_token, expires_at } });
 }
 
 export async function upsertActivity(activity) {
-    if (activity) {
-        const db = await getMongoClient();
-        await db.collection(ACTIVITIES_COLLECTION).update({ _id: activity._id }, activity, { upsert: true });
-    }
+    const client = await getMongoClient();
+    await client.collection(ACTIVITIES_COLLECTION).replaceOne({ _id: activity._id }, activity, { upsert: true });
 }

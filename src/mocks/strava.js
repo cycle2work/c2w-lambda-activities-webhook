@@ -1,3 +1,9 @@
+export const mockedRefreshTokenResponse = {
+    access_token: "a4b945687g...",
+    refresh_token: "e5n567567...",
+    expires_at: "1568775134"
+};
+
 export const mockedActivity = {
     id: 12345678987654321,
     resource_state: 3,
