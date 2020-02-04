@@ -35,6 +35,8 @@ export default async function pipeline(event, context, callback) {
                 log.debug("Refreshing token");
                 const { access_token, refresh_token, expires_at } = await refreshToken(athlete.refresh_token);
                 await updateAthleteToken(parsed.owner_id, access_token, refresh_token, expires_at);
+
+                athlete.access_token = access_token;
             }
 
             const activity = await getActivity({

@@ -29,6 +29,7 @@ describe("Cycle2work activities function", () => {
         await client.collection(ATHLETES_COLLECTION).insertOne({
             id: mockedActivity.athlete.id,
             expires_at: moment.utc().unix() + 1000,
+            access_token: "access_token",
             refresh_token: "refresh_token",
             clubs: [
                 {
@@ -112,6 +113,7 @@ describe("Cycle2work activities function", () => {
         expect(activities.find(x => x.club.id === 2)).toBeDefined();
 
         expect(strava.refreshToken).toHaveBeenCalledTimes(0);
+        expect(strava.getActivity).toHaveBeenCalledWith({ access_token: "access_token", id: mockedActivity.id });
 
         activities.forEach(x => {
             expect(x.name).toBe("#cycle2work yo!");
@@ -142,6 +144,7 @@ describe("Cycle2work activities function", () => {
 
         expect(context.succeed).toHaveBeenCalledTimes(1);
         expect(strava.refreshToken).toHaveBeenCalledWith("refresh_token");
+        expect(strava.getActivity).toHaveBeenCalledWith({ access_token: mockedRefreshTokenResponse.access_token, id: mockedActivity.id });
         expect(athlete).toMatchObject(mockedRefreshTokenResponse);
     });
 });
