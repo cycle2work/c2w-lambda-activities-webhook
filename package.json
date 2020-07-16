@@ -8,31 +8,31 @@
         "url": "https://github.com/cycle2work/c2w-lambda-activities"
     },
     "dependencies": {
-        "@babel/polyfill": "^7.8.3",
-        "@babel/register": "^7.8.3",
+        "@babel/polyfill": "^7.10.4",
+        "@babel/register": "^7.10.5",
         "bluebird": "^3.7.2",
-        "bunyan": "^1.8.12",
-        "moment": "^2.24.0",
-        "mongodb": "^3.5.2",
-        "strava-v3": "^2.0.3"
+        "bunyan": "^1.8.14",
+        "moment": "^2.27.0",
+        "mongodb": "^3.5.9",
+        "strava-v3": "^2.0.5"
     },
     "devDependencies": {
-        "@babel/cli": "^7.8.4",
-        "@babel/core": "^7.8.4",
-        "@babel/preset-env": "^7.8.4",
-        "@types/jest": "^25.1.1",
-        "babel-jest": "^25.1.0",
-        "codecov": "^3.6.4",
-        "eslint": "^6.8.0",
-        "jest": "^25.1.0"
+        "@babel/cli": "^7.10.5",
+        "@babel/core": "^7.10.5",
+        "@babel/preset-env": "^7.10.4",
+        "@types/jest": "^26.0.4",
+        "babel-jest": "^26.1.0",
+        "codecov": "^3.7.0",
+        "eslint": "^7.4.0",
+        "jest": "^26.1.0"
     },
     "scripts": {
         "build": "babel src -d bundle",
         "codecov": "codecov",
         "coverage": "yarn test --coverage",
-        "dev": "jest --watch --runInBand",
+        "dev": "jest --watch",
         "lint": "eslint src",
-        "test": "jest --forceExit"
+        "test": "jest"
     },
     "license": "Apache-2.0"
 }
