@@ -2,7 +2,7 @@ import { map } from "bluebird";
 import moment from "moment";
 
 import { log } from "./services/logger";
-import { upsertActivity, retrieveAthlete, updateAthleteToken} from "./services/mongo-db";
+import { upsertActivity, retrieveAthlete, updateAthleteToken, upsertProcessedActivity} from "./services/mongo-db";
 import { getActivity, refreshToken } from "./services/strava";
 
 export default async function pipeline(event, context, callback) {
@@ -56,6 +56,17 @@ export default async function pipeline(event, context, callback) {
                         year: date.format("YYYY"),
                         month: parseInt(date.format("MM")),
                         day: date.format("DD")
+                    });
+
+                    await upsertProcessedActivity({
+                        _id: `${activity.id}${club.id}`,
+                        activityId: activity.id,
+                        athleteId: athlete.id,
+                        athleteName: `${athlete.firstName} ${athlete.lastname}`,
+                        clubId: club.id,
+                        year: parseInt(date.format("YYYY")),
+                        month: parseInt(date.format("MM")),
+                        day: parseInt(date.format("DD"))
                     });
                 });
             }
