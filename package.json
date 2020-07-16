@@ -30,9 +30,9 @@
         "build": "babel src -d bundle",
         "codecov": "codecov",
         "coverage": "yarn test --coverage",
-        "dev": "jest --watch --runInBand",
+        "dev": "jest --watch",
         "lint": "eslint src",
-        "test": "jest --forceExit"
+        "test": "jest"
     },
     "license": "Apache-2.0"
 }
