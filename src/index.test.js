@@ -2,24 +2,21 @@ import { handler } from ".";
 import { ACTIVITIES_COLLECTION, ATHLETES_COLLECTION, DB_NAME } from "./config";
 
 import { mockedActivity, mockedRefreshTokenResponse } from "./mocks/strava";
-import * as strava from "./services/strava";
+import { getActivity, refreshToken } from "./services/strava";
 
 import { getMongoClient } from "./services/mongo-db";
-import { Promise } from "bluebird";
+
 import moment from "moment";
 
-strava.getActivity = jest.fn(() => {
-    return new Promise((resolve) => resolve(mockedActivity));
-});
-
-strava.refreshToken = jest.fn(() => {
-    return new Promise((resolve) => resolve(mockedRefreshTokenResponse));
-});
+jest.mock("./services/strava");
 
 describe("Cycle2work activities function", () => {
     let client;
     let context;
     let callback = jest.fn();
+
+    getActivity.mockResolvedValue(mockedActivity);
+    refreshToken.mockResolvedValue(mockedRefreshTokenResponse);
 
     beforeAll(async () => {
         client = await getMongoClient();
@@ -111,8 +108,8 @@ describe("Cycle2work activities function", () => {
         expect(activities.find((x) => x.club.id === 1)).toBeDefined();
         expect(activities.find((x) => x.club.id === 2)).toBeDefined();
 
-        expect(strava.refreshToken).toHaveBeenCalledTimes(0);
-        expect(strava.getActivity).toHaveBeenCalledWith({ access_token: "access_token", id: mockedActivity.id });
+        expect(refreshToken).toHaveBeenCalledTimes(0);
+        expect(getActivity).toHaveBeenCalledWith({ access_token: "access_token", id: mockedActivity.id });
 
         activities.forEach((x) => {
             expect(x.name).toBe("#cycle2work yo!");
@@ -145,8 +142,8 @@ describe("Cycle2work activities function", () => {
         const athlete = await client.db(DB_NAME).collection(ATHLETES_COLLECTION).findOne({ id: mockedActivity.athlete.id });
 
         expect(context.succeed).toHaveBeenCalledTimes(1);
-        expect(strava.refreshToken).toHaveBeenCalledWith("refresh_token");
-        expect(strava.getActivity).toHaveBeenCalledWith({ access_token: mockedRefreshTokenResponse.access_token, id: mockedActivity.id });
+        expect(refreshToken).toHaveBeenCalledWith("refresh_token");
+        expect(getActivity).toHaveBeenCalledWith({ access_token: mockedRefreshTokenResponse.access_token, id: mockedActivity.id });
         expect(athlete).toMatchObject(mockedRefreshTokenResponse);
     });
 });
