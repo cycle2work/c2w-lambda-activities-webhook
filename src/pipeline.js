@@ -66,7 +66,8 @@ export default async function pipeline(event, context, callback) {
                         clubId: club.id,
                         year: parseInt(date.format("YYYY")),
                         month: parseInt(date.format("MM")),
-                        day: parseInt(date.format("DD"))
+                        day: parseInt(date.format("DD")),
+                        distance: activity.distance
                     });
                 });
             }
