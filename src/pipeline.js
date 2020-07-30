@@ -62,7 +62,7 @@ export default async function pipeline(event, context, callback) {
                         _id: `${activity.id}${club.id}`,
                         activityId: activity.id,
                         athleteId: athlete.id,
-                        athleteName: `${athlete.firstName} ${athlete.lastname}`,
+                        athleteName: `${athlete.firstname} ${athlete.lastname}`,
                         clubId: club.id,
                         year: parseInt(date.format("YYYY")),
                         month: parseInt(date.format("MM")),
