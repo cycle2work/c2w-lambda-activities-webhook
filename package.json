@@ -8,7 +8,7 @@
         "url": "https://github.com/cycle2work/c2w-lambda-activities"
     },
     "dependencies": {
-        "@babel/polyfill": "^7.10.4",
+        "@babel/polyfill": "^7.11.5",
         "@babel/register": "^7.10.5",
         "bluebird": "^3.7.2",
         "bunyan": "^1.8.14",
