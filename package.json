@@ -13,7 +13,7 @@
         "bluebird": "^3.7.2",
         "bunyan": "^1.8.14",
         "moment": "^2.27.0",
-        "mongodb": "^3.5.9",
+        "mongodb": "^3.6.10",
         "strava-v3": "^2.0.5"
     },
     "devDependencies": {
